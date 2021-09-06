@@ -1,0 +1,19 @@
+#!/usr/bin/expect -f
+
+set timeout -1
+#spawn qemu-system-x86_64 -m 8G -serial stdio -cdrom out/linux.iso -drive file=out/main.img,if=virtio -netdev user,id=net0 -device e1000,netdev=net0
+spawn qemu-system-x86_64 -m 8G -serial stdio \
+  -kernel out/linux-kernel \
+  -cdrom out/linux.iso \
+  -drive file=out/main.img,if=virtio \
+  -netdev user,id=net0 -device e1000,netdev=net0 \
+  -append "root=/dev/vda console=ttyS0"
+
+expect -re {(?n)^root@.*# }
+# QEMU mounts drives as vda instead of sda
+send "fdisk /dev/vda"
+expect "# "
+send "mkfs.ext4 /dev/vda1"
+expect "# "
+send "pacstrap /mnt base linux linux-firmware
+# send "shutdown -h now"
