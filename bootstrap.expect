@@ -9,12 +9,15 @@ spawn qemu-system-x86_64 \
   -netdev user,id=net0 \
   -device e1000,netdev=net0
 
-#spawn qemu-system-x86_64 -m 8G -serial stdio \
-#  -kernel out/linux-kernel \
-#  -cdrom out/linux.iso \
-#  -drive file=out/main.img,if=virtio \
-#  -netdev user,id=net0 -device e1000,netdev=net0 \
-#  -append "root=/dev/vda console=ttyS0"
+sleep 1
+send \t
+sleep 1
+send " console=ttyS0,115200"
+sleep 1
+send \n
+
+expect "archiso login: "
+send "root"
 
 expect -re {(?n)^root@.*# }
 # QEMU mounts drives as vda instead of sda
