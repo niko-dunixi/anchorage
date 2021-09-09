@@ -1,0 +1,5 @@
+brew "aria2"
+brew "docker"
+brew "gnu-sed"
+brew "qemu"
+brew "xorriso"

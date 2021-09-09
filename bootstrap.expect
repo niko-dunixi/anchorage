@@ -1,8 +1,10 @@
-#!/usr/bin/expect -f
+#!/usr/bin/expect -d
 
 set timeout -1
 spawn qemu-system-x86_64 \
+  -display none \
   -m 8G \
+  --machine accel=hvf \
   -serial stdio \
   -cdrom out/linux.iso \
   -drive file=out/main.img,if=virtio \
@@ -16,10 +18,17 @@ send " console=ttyS0,115200"
 sleep 1
 send \n
 
+# We have to wait a very long time. The console seems to catch the 
+#expect -re {(?n)^archiso login:\s+}
+#sleep 90
 expect "archiso login: "
-send "root"
+send root\n
 
-expect -re {(?n)^root@.*# }
+#expect -re {(?n)^root@.*#\s+}
+#sleep 5
+expect "root@archiso ~ # "
+send "fdisk -l"
+
 # QEMU mounts drives as vda instead of sda
 send "fdisk /dev/vda"
 expect "# "
