@@ -15,7 +15,8 @@ elif is-command pacman; then
     qemu \
     vde2 \
     virt-manager \
-    virt-viewer
+    virt-viewer \
+    xorriso
     # bridge-utils \
     # dnsmasq \
     # vde2 \
